@@ -1,14 +1,16 @@
 import "./About.scss"
+import { Container } from "./Container/Container"
+import { Header } from "./Header/Header"
+import { Poster } from "./Poster/Poster"
 
-type Props = {
-  children: React.ReactNode
-}
-
-export const About = ({ children }: Props) => {
+export const About = () => {
   return (
     <div className="about">
       <div className="about__triangle" />
-      {children}
+      <Container>
+        <Header />
+        <Poster />
+      </Container>
     </div>
   )
 }

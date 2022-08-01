@@ -1,0 +1,28 @@
+$font: "Quicksand", sans-serif;
+
+.main {
+  background-image: url(../../../img/main.png);
+  min-height: 1558;
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center;
+  position: relative;
+}
+
+.main__title {
+  text-align: center;
+  color: #fff;
+  font-size: 41px;
+  line-height: 51px;
+  font-family: $font;
+  padding: 32px 0 50px 0;
+}
+
+.main__footer-title {
+  text-align: center;
+  color: #fff;
+  font-size: 41px;
+  line-height: 51px;
+  font-family: $font;
+  padding: 36px 0 50px 0;
+}
