@@ -1,0 +1,67 @@
+$font: "Quicksand", sans-serif;
+
+.about__poster {
+  margin-top: 88px;
+
+  .about__poster-title {
+    color: #fff;
+    font-size: 20px;
+    line-height: 25px;
+    text-shadow: -7px 6px 8px rgba(0, 0, 0, 0.61);
+    font-family: $font;
+    padding-bottom: 10px;
+  }
+
+  .about__poster-horLine1 {
+    border-bottom: 1px solid rgba(0, 0, 0, 0.7);
+    max-width: 626px;
+    width: 100%;
+    margin-bottom: 6px;
+    margin-left: -5px;
+  }
+  .about__poster-horLine2 {
+    border-bottom: 1px solid #000;
+    max-width: 626px;
+    width: 100%;
+    margin-bottom: 16px;
+  }
+  .about__poster-verLine1 {
+    border-left: 1px solid #000;
+    max-height: 794px;
+    height: 100%;
+    position: absolute;
+    left: -6px;
+  }
+  .about__poster-verLine2 {
+    border-left: 1px solid rgba(0, 0, 0, 0.5);
+    max-height: 794px;
+    height: 100%;
+    margin-bottom: 16px;
+    position: absolute;
+    left: -16px;
+    margin-top: 5px;
+  }
+}
+
+.about__poster-container {
+  position: relative;
+  height: 794px;
+
+  img {
+    position: absolute;
+    left: -15px;
+  }
+  img:nth-child(2) {
+    top: 318px;
+  }
+  img:nth-child(3) {
+    top: 480px;
+  }
+  img:nth-child(4) {
+    top: 608px;
+  }
+  img:nth-child(5) {
+    top: 709px;
+    left: 15px;
+  }
+}

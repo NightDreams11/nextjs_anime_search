@@ -1,0 +1,25 @@
+$font: "Quicksand", sans-serif;
+
+nav {
+  padding-top: 30px;
+  width: 635px;
+  ul {
+    display: flex;
+    justify-content: space-between;
+    padding-left: 10px;
+    li {
+      font-family: $font;
+      font-size: 32px;
+      line-height: 40px;
+      list-style-type: none;
+      z-index: 1;
+      cursor: pointer;
+    }
+  }
+}
+
+.about__logo {
+  position: absolute;
+  right: -64px;
+  top: 35px;
+}
