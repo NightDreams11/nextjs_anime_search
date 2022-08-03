@@ -1,0 +1,14 @@
+.search__container {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+}
+
+.search__searchField {
+  padding-top: 20px;
+}
+
+.search__paginator {
+  margin-top: auto;
+  padding-bottom: 50px;
+}
