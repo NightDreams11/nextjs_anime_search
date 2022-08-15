@@ -17,6 +17,7 @@
     "css-loader": "^6.7.1",
     "mini-css-extract-plugin": "^2.6.1",
     "mobx": "^6.6.1",
+    "mobx-react": "^7.5.2",
     "mobx-react-lite": "^3.4.0",
     "next": "12.2.3",
     "next-compose-plugins": "^2.2.1",

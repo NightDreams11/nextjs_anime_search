@@ -4,7 +4,7 @@ import logo from "../../../../img/logo.svg"
 export const Header = () => {
   return (
     <>
-      <nav>
+      <nav className="about__nav">
         <ul>
           <li>İletişim</li>
           <li>Hakkımda</li>
