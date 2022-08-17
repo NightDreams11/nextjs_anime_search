@@ -2,7 +2,7 @@ $font: "Quicksand", sans-serif;
 
 .main {
   background-image: url(../../../img/main.png);
-  min-height: 1558;
+  min-height: 1558px;
   background-repeat: no-repeat;
   background-size: cover;
   background-position: center;
@@ -16,6 +16,16 @@ $font: "Quicksand", sans-serif;
   line-height: 51px;
   font-family: $font;
   padding: 32px 0 50px 0;
+}
+
+.main__image-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 50px 70px;
+  width: 1470px;
+  & img {
+    width: calc(50% - 70px / 2);
+  }
 }
 
 .main__footer-title {

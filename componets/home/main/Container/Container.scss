@@ -1,10 +1,4 @@
 .main__container {
-  width: 1328px;
+  width: 1470px;
   margin: 0 auto;
-  & img:not(:nth-child(1n + 8)) {
-    margin-bottom: 50px;
-  }
-  & img:nth-child(2n-1) {
-    padding-left: 70px;
-  }
 }

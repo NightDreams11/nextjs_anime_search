@@ -1,7 +1,9 @@
 import { action, makeAutoObservable, observable } from "mobx"
+import { createContext, useContext, useMemo } from "react"
 
 export interface IFilm {
   approved: boolean
+  mal_id: number
   background: string
   raiting: string
   score: number
@@ -22,6 +24,15 @@ export interface IFilm {
     }
   }
 }
+export interface IPagination {
+  last_visible_page: number
+  has_next_page: boolean
+  items: {
+    count: number
+    total: number
+    per_page: number
+  }
+}
 
 interface ApiResponse<T> {
   data: T
@@ -30,29 +41,26 @@ interface ApiResponse<T> {
   metadata: any
 }
 
-export const fetchFilms = async () => {
-  return await fetch("https://api.jikan.moe/v4/anime")
-    .then((response) => {
-      return response.json() as Promise<ApiResponse<IFilm[]>>
-    })
-    .then((film) => {
-      return film.data
-    })
-}
-
 interface IStore {
   films: IFilm[]
+  pagination: IPagination[]
   fetchFilms: () => void
 }
 
-export function initializeStore(initialData: any = null) {
-  const store = new Store()
+let store: Store
+
+export function initializeStore(initialData = null): Store {
+  const _store = store ?? new Store()
 
   if (initialData) {
-    store.hydrate(initialData)
+    _store.hydrate(initialData)
   }
 
-  return store
+  if (typeof window === "undefined") return _store
+
+  if (!store) store = _store
+
+  return _store
 }
 
 class Store implements IStore {
@@ -61,6 +69,7 @@ class Store implements IStore {
   }
 
   @observable films = [] as Array<IFilm>
+  @observable pagination = [] as Array<IPagination>
 
   @action async fetchFilms() {
     return fetch("https://api.jikan.moe/v4/anime")
@@ -68,22 +77,41 @@ class Store implements IStore {
         return response.json() as Promise<ApiResponse<IFilm[]>>
       })
       .then((film) => {
-        return (this.films = film.data)
+        this.films = film.data
+        this.pagination = film.pagination
       })
-  }
-
-  @action setFilms(films: Array<IFilm>) {
-    this.films = films
   }
 
   @action hydrate(data: any) {
     if (data) {
-      this.films = data
+      this.films = data.films
     }
   }
 }
 
-export const useStore = (initialState: any) => {
-  const store = initializeStore(initialState)
-  return store
+export const StoreContext = createContext<Store>(initializeStore())
+export function useStore() {
+  const context = useContext(StoreContext)
+  if (context === undefined) {
+    throw new Error("useStore must be used within StoreProvider")
+  }
+
+  return context
 }
+
+export function StoreProvider({
+  children,
+  initialState: initialData,
+}: {
+  children: React.ReactNode
+  initialState: any
+}) {
+  const store = initializeStore(initialData)
+
+  return <StoreContext.Provider value={store}>{children}</StoreContext.Provider>
+}
+
+// export const useStore = (init?: any) => {
+//   const store = useMemo(() => initializeStore(init), [init])
+//   return store
+// }
