@@ -1,5 +1,5 @@
 import { action, makeAutoObservable, observable } from "mobx"
-import { createContext, useContext, useMemo } from "react"
+import { createContext, useContext } from "react"
 
 export interface IFilm {
   approved: boolean
@@ -25,9 +25,10 @@ export interface IFilm {
   }
 }
 export interface IPagination {
-  last_visible_page: number
-  has_next_page: boolean
-  items: {
+  current_page?: number
+  last_visible_page?: number
+  has_next_page?: boolean
+  items?: {
     count: number
     total: number
     per_page: number
@@ -41,15 +42,25 @@ interface ApiResponse<T> {
   metadata: any
 }
 
+type FetchFilmsType = {
+  page?: number
+  limit?: number
+}
+
 interface IStore {
   films: IFilm[]
-  pagination: IPagination[]
-  fetchFilms: () => void
+  pagination: IPagination
+  fetchFilms: ({ page, limit }: FetchFilmsType) => void
+}
+
+interface IinitializeStore {
+  films: IFilm[]
+  pagination: IPagination
 }
 
 let store: Store
 
-export function initializeStore(initialData = null): Store {
+export function initializeStore(initialData?: IinitializeStore): Store {
   const _store = store ?? new Store()
 
   if (initialData) {
@@ -69,10 +80,10 @@ class Store implements IStore {
   }
 
   @observable films = [] as Array<IFilm>
-  @observable pagination = [] as Array<IPagination>
+  @observable pagination: IPagination = {}
 
-  @action async fetchFilms() {
-    return fetch("https://api.jikan.moe/v4/anime")
+  @action async fetchFilms({ page = 1, limit = 10 }: FetchFilmsType) {
+    return fetch(`https://api.jikan.moe/v4/anime?page=${page}&limit=${limit}`)
       .then((response) => {
         return response.json() as Promise<ApiResponse<IFilm[]>>
       })
@@ -82,9 +93,10 @@ class Store implements IStore {
       })
   }
 
-  @action hydrate(data: any) {
+  @action hydrate(data: IinitializeStore) {
     if (data) {
       this.films = data.films
+      this.pagination = data.pagination
     }
   }
 }
@@ -104,14 +116,9 @@ export function StoreProvider({
   initialState: initialData,
 }: {
   children: React.ReactNode
-  initialState: any
+  initialState: IinitializeStore
 }) {
   const store = initializeStore(initialData)
 
   return <StoreContext.Provider value={store}>{children}</StoreContext.Provider>
 }
-
-// export const useStore = (init?: any) => {
-//   const store = useMemo(() => initializeStore(init), [init])
-//   return store
-// }
