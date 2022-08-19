@@ -2,28 +2,20 @@ import * as React from "react"
 import Pagination from "@mui/material/Pagination"
 import Stack from "@mui/material/Stack"
 import "./Paginator.scss"
-import { useStore } from "../../../store/store"
-import { toJS } from "mobx"
 
 type PaginatorType = {
   totalPagesCount: number
   pageSize: number
   currentPage: number
+  handleChangePage: (page: string) => void
 }
 
 export default function Paginator({
   totalPagesCount,
   pageSize,
   currentPage,
+  handleChangePage,
 }: PaginatorType) {
-  const store = useStore()
-
-  console.log(toJS(store))
-
-  const handleChangePage = (page: number) => {
-    store.fetchFilms({ page })
-  }
-
   return (
     <div className="paginatorContainer">
       <Stack spacing={2}>
@@ -34,7 +26,9 @@ export default function Paginator({
           showLastButton
           showFirstButton
           page={currentPage}
-          onChange={(e, page) => handleChangePage(page)}
+          onChange={(e, page) => {
+            handleChangePage(String(page))
+          }}
         />
       </Stack>
     </div>
