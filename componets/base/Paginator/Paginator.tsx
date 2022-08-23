@@ -5,14 +5,12 @@ import "./Paginator.scss"
 
 type PaginatorType = {
   totalPagesCount: number
-  pageSize: number
   currentPage: number
   handleChangePage: (page: string) => void
 }
 
 export default function Paginator({
   totalPagesCount,
-  pageSize,
   currentPage,
   handleChangePage,
 }: PaginatorType) {

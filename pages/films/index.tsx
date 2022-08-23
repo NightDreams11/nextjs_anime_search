@@ -4,18 +4,11 @@ import SearchField from "../../componets/base/SearchField/SearchField"
 import { observer } from "mobx-react-lite"
 import { initializeStore, useStore } from "../../store/store"
 import React, { useEffect, useMemo } from "react"
-import Link from "next/link"
 import FilmsList from "../../componets/FilmsList/FilmsList"
 import { useRouter } from "next/router"
 import PageSizeSelecter from "../../componets/PageSizeSelecter/PageSizeSelecter"
-import { toJS } from "mobx"
 import { NextPageContext } from "next"
-
-// type Props = {
-//   initialState: {
-//     films: IFilm
-//   }
-// }
+import { Button } from "@mui/material"
 
 const defaultTotalItemsCount = 10
 const defaultPageSize = 10
@@ -27,24 +20,24 @@ const Search = observer(() => {
   const route = useRouter()
 
   type handleChangeQueryType = {
-    search?: string
     page?: string
     perPage?: string
+    filmTitle?: string
   }
 
   const handleChangeQuery = ({
-    search,
     page,
     perPage,
+    filmTitle,
   }: handleChangeQueryType) => {
     route.push({
       query: {
         // Сетаем параметры из URL,
         // прежде чем сетать новые параметры, чтобы не терять предыдущее значение
         ...route.query,
-        ...(search ? { search } : {}),
         ...(page ? { page } : {}),
         ...(perPage ? { perPage } : {}),
+        ...(filmTitle ? { filmTitle } : {}),
       },
     })
   }
@@ -57,47 +50,59 @@ const Search = observer(() => {
     handleChangeQuery({ perPage })
   }
 
+  const handleChangeFilmTile = (filmTitle: string | undefined) => {
+    handleChangeQuery({ filmTitle })
+  }
+
   const page = useMemo(() => {
-    return !!Number(route.query.page)
-      ? Number(route.query.page)
-      : defaultCurrentPage
+    return route.query.page ? Number(route.query.page) : defaultCurrentPage
   }, [route.query])
 
   const perPage = useMemo(() => {
-    return !!Number(route.query.perPage)
-      ? Number(route.query.perPage)
-      : defaultPageSize
+    return route.query.perPage ? Number(route.query.perPage) : defaultPageSize
   }, [route.query])
 
-  // console.log(route.query)
+  let filmTitle = useMemo(() => {
+    return route.query.filmTitle as string
+  }, [route.query])
+
+  const resetQueries = () => {
+    route.push({})
+    filmTitle = ""
+  }
+
+  const isQueries = useMemo(() => {
+    return route.query.page || route.query.perPage || route.query.filmTitle
+  }, [route.query])
 
   useEffect(() => {
-    store.fetchFilms({ page, limit: perPage })
+    store.fetchFilms({ page, limit: perPage, q: filmTitle })
   }, [route.query])
 
   return (
     <div className="search__container">
       <div className="search__searchField">
-        <SearchField />
+        <SearchField
+          handleChangeFilmTile={handleChangeFilmTile}
+          filmName={filmTitle}
+        />
         <PageSizeSelecter
           handleChangePageSize={handleChangePageSize}
           perPage={String(perPage)}
         />
+        {isQueries && <Button onClick={resetQueries}>Reset</Button>}
       </div>
       <div>
         {store.films.map((film) => {
           return (
             <div key={film.mal_id}>
-              <Link href={`/films/${film.mal_id}`}>
-                <a>
-                  <FilmsList
-                    title={film.title}
-                    imageUrl={film.images.jpg.image_url}
-                    synopsis={film.synopsis}
-                    score={film.score}
-                  />
-                </a>
-              </Link>
+              <FilmsList
+                title={film.title}
+                imageUrl={film.images.jpg.image_url}
+                synopsis={film.synopsis}
+                score={film.score}
+                id={film.mal_id}
+              />
             </div>
           )
         })}
@@ -107,7 +112,6 @@ const Search = observer(() => {
           totalPagesCount={
             store.pagination.last_visible_page ?? defaultTotalItemsCount
           }
-          pageSize={perPage ?? defaultPageSize}
           currentPage={page ?? defaultCurrentPage}
           handleChangePage={handleChangePage}
         />
@@ -117,12 +121,15 @@ const Search = observer(() => {
 })
 
 export async function getServerSideProps(context: NextPageContext) {
-  // console.log("context", context)
-
   const store = initializeStore()
   await store.fetchFilms({
-    page: Number(context.query.page),
-    limit: Number(context.query.perPage),
+    ...(context.query.page ? { page: Number(context.query.page) } : {}),
+    ...(context.query.perPage ? { limit: Number(context.query.perPage) } : {}),
+    ...(context.query.q
+      ? {
+          q: context.query.q as string,
+        }
+      : {}),
   })
 
   return {

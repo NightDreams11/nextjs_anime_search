@@ -45,6 +45,7 @@ interface ApiResponse<T> {
 type FetchFilmsType = {
   page?: number
   limit?: number
+  q?: string
 }
 
 interface IStore {
@@ -82,8 +83,14 @@ class Store implements IStore {
   @observable films = [] as Array<IFilm>
   @observable pagination: IPagination = {}
 
-  @action async fetchFilms({ page = 1, limit = 10 }: FetchFilmsType) {
-    return fetch(`https://api.jikan.moe/v4/anime?page=${page}&limit=${limit}`)
+  @action async fetchFilms({ page = 1, limit = 10, q }: FetchFilmsType) {
+    const params = new URLSearchParams({
+      page: String(page),
+      limit: String(limit),
+      ...(q ? { q } : {}),
+    })
+
+    return fetch(`https://api.jikan.moe/v4/anime?${params.toString()}`)
       .then((response) => {
         return response.json() as Promise<ApiResponse<IFilm[]>>
       })
