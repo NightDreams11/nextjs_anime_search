@@ -23,6 +23,7 @@ export interface IFilm {
       small_image_url: string
     }
   }
+  type: string
 }
 export interface IPagination {
   current_page?: number
@@ -46,6 +47,8 @@ type FetchFilmsType = {
   page?: number
   limit?: number
   q?: string
+  type?: string
+  date_range?: string
 }
 
 interface IStore {
@@ -83,11 +86,21 @@ class Store implements IStore {
   @observable films = [] as Array<IFilm>
   @observable pagination: IPagination = {}
 
-  @action async fetchFilms({ page = 1, limit = 10, q }: FetchFilmsType) {
+  @action async fetchFilms({
+    page = 1,
+    limit = 10,
+    q,
+    type,
+    date_range,
+  }: FetchFilmsType) {
+    const [start_date, end_date] = date_range?.split("-") ?? []
     const params = new URLSearchParams({
       page: String(page),
       limit: String(limit),
       ...(q ? { q } : {}),
+      ...(type ? { type } : {}),
+      ...(date_range ? { start_date } : {}),
+      ...(date_range ? { end_date } : {}),
     })
 
     return fetch(`https://api.jikan.moe/v4/anime?${params.toString()}`)

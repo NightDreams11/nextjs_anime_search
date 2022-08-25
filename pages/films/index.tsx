@@ -1,34 +1,41 @@
 import "./index.scss"
-import Paginator from "../../componets/base/Paginator/Paginator"
-import SearchField from "../../componets/base/SearchField/SearchField"
+import Paginator from "../../components/base/Paginator/Paginator"
+import SearchField from "../../components/base/SearchField/SearchField"
 import { observer } from "mobx-react-lite"
 import { initializeStore, useStore } from "../../store/store"
-import React, { useEffect, useMemo } from "react"
-import FilmsList from "../../componets/FilmsList/FilmsList"
+import React, { useEffect, useMemo, useState } from "react"
+import FilmsList from "../../components/FilmsList/FilmsList"
 import { useRouter } from "next/router"
-import PageSizeSelecter from "../../componets/PageSizeSelecter/PageSizeSelecter"
+import PageSizeSelecter from "../../components/PageSizeSelecter/PageSizeSelecter"
 import { NextPageContext } from "next"
 import { Button } from "@mui/material"
+import { toJS } from "mobx"
+import MovieTypeSelector from "../../components/MovieTypeSelecter/MovieTypeSelecter"
+import FilmDateSelecter from "../../components/FilmDateSelecter/FilmDateSelecter"
 
 const defaultTotalItemsCount = 10
 const defaultPageSize = 10
 const defaultCurrentPage = 1
+const defaultFilmDate = "1"
 
 const Search = observer(() => {
   const store = useStore()
-
   const route = useRouter()
 
   type handleChangeQueryType = {
     page?: string
     perPage?: string
     filmTitle?: string
+    type?: string
+    date_range?: string
   }
 
   const handleChangeQuery = ({
     page,
     perPage,
     filmTitle,
+    type,
+    date_range,
   }: handleChangeQueryType) => {
     route.push({
       query: {
@@ -38,6 +45,8 @@ const Search = observer(() => {
         ...(page ? { page } : {}),
         ...(perPage ? { perPage } : {}),
         ...(filmTitle ? { filmTitle } : {}),
+        ...(type ? { type } : {}),
+        ...(date_range ? { date_range } : {}),
       },
     })
   }
@@ -54,6 +63,14 @@ const Search = observer(() => {
     handleChangeQuery({ filmTitle })
   }
 
+  const handleChangeFilmType = (type: string) => {
+    handleChangeQuery({ type })
+  }
+
+  const handleChangeDate = (date: string) => {
+    handleChangeQuery({ date_range: date })
+  }
+
   const page = useMemo(() => {
     return route.query.page ? Number(route.query.page) : defaultCurrentPage
   }, [route.query])
@@ -66,17 +83,37 @@ const Search = observer(() => {
     return route.query.filmTitle as string
   }, [route.query])
 
+  let filmType = useMemo(() => {
+    return route.query.type as string
+  }, [route.query])
+
+  let dateRange = useMemo(() => {
+    return route.query.date_range as string
+  }, [route.query])
+
   const resetQueries = () => {
     route.push({})
     filmTitle = ""
   }
 
   const isQueries = useMemo(() => {
-    return route.query.page || route.query.perPage || route.query.filmTitle
+    return (
+      route.query.page ||
+      route.query.perPage ||
+      route.query.filmTitle ||
+      route.query.type ||
+      route.query.date_range
+    )
   }, [route.query])
 
   useEffect(() => {
-    store.fetchFilms({ page, limit: perPage, q: filmTitle })
+    store.fetchFilms({
+      page,
+      limit: perPage,
+      q: filmTitle,
+      type: filmType,
+      date_range: dateRange,
+    })
   }, [route.query])
 
   return (
@@ -90,6 +127,14 @@ const Search = observer(() => {
           handleChangePageSize={handleChangePageSize}
           perPage={String(perPage)}
         />
+        <MovieTypeSelector
+          handleChangeFilmType={handleChangeFilmType}
+          type={filmType}
+        />
+        <FilmDateSelecter
+          handleChangeDate={handleChangeDate}
+          date={dateRange ?? defaultFilmDate}
+        />
         {isQueries && <Button onClick={resetQueries}>Reset</Button>}
       </div>
       <div>
@@ -102,6 +147,8 @@ const Search = observer(() => {
                 synopsis={film.synopsis}
                 score={film.score}
                 id={film.mal_id}
+                type={film.type}
+                year={film.year}
               />
             </div>
           )
@@ -129,6 +176,10 @@ export async function getServerSideProps(context: NextPageContext) {
       ? {
           q: context.query.q as string,
         }
+      : {}),
+    ...(context.query.type ? { type: context.query.type as string } : {}),
+    ...(context.query.startDate
+      ? { date_range: context.query.date_range as string }
       : {}),
   })
 

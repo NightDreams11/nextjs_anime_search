@@ -7,9 +7,19 @@ type FilmsListType = {
   synopsis: string
   score: number
   id: number
+  type: string
+  year: number
 }
 
-const FilmsList = ({ title, imageUrl, synopsis, score, id }: FilmsListType) => {
+const FilmsList = ({
+  title,
+  imageUrl,
+  synopsis,
+  score,
+  id,
+  type,
+  year,
+}: FilmsListType) => {
   return (
     <div className="filmsList__body">
       <div className="filmsList__image">
@@ -25,6 +35,8 @@ const FilmsList = ({ title, imageUrl, synopsis, score, id }: FilmsListType) => {
       </div>
       <div className="filmsList__score-container">
         <div className="filmsList__score">{score}</div>
+        <div>{type}</div>
+        <div>{year}</div>
       </div>
     </div>
   )
