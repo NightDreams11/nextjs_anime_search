@@ -1,29 +1,42 @@
 import * as React from "react"
 import Box from "@mui/material/Box"
-import InputLabel from "@mui/material/InputLabel"
 import MenuItem from "@mui/material/MenuItem"
 import FormControl from "@mui/material/FormControl"
-import Select, { SelectChangeEvent } from "@mui/material/Select"
+import { TextField } from "@mui/material"
 
 type PageSizeSelecterType = {
   handleChangePageSize: (perPage: string) => void
-  perPage: string
+  perPage: number | undefined
 }
 
 export default function PageSizeSelecter({
   handleChangePageSize,
   perPage,
 }: PageSizeSelecterType) {
-  const handleChange = (event: SelectChangeEvent) => {
+  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     handleChangePageSize(event.target.value)
+  }
+
+  const styles = {
+    textField: {
+      ".MuiInputBase-root": {
+        height: 32,
+      },
+      ".MuiFormLabel-root": {
+        top: -11,
+      },
+      ".Mui-focused": {
+        top: 0,
+      },
+    },
   }
 
   return (
     <Box sx={{ minWidth: 120 }}>
       <FormControl fullWidth>
-        <InputLabel id="demo-simple-select-label">Size</InputLabel>
-        <Select
-          labelId="demo-simple-select-label"
+        <TextField
+          sx={styles.textField}
+          select
           id="demo-simple-select"
           value={perPage}
           label="Size"
@@ -32,7 +45,7 @@ export default function PageSizeSelecter({
           <MenuItem value={10}>10</MenuItem>
           <MenuItem value={20}>20</MenuItem>
           <MenuItem value={30}>30</MenuItem>
-        </Select>
+        </TextField>
       </FormControl>
     </Box>
   )

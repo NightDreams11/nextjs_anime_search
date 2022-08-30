@@ -31,12 +31,24 @@ const FilmsList = ({
       </div>
       <div className="filmsList__description-container">
         <div className="filmsList__title">{title}</div>
+        <div className="filmsList__score-container">
+          {score && (
+            <div className="filmsList__score">
+              Raiting: <span>{score}</span>
+            </div>
+          )}
+          {year && (
+            <div className="filmList__aired">
+              Aired: <span>{year}</span>
+            </div>
+          )}
+          {type && (
+            <div className="filmList__type">
+              Type: <span>{type}</span>
+            </div>
+          )}
+        </div>
         <div>{synopsis}</div>
-      </div>
-      <div className="filmsList__score-container">
-        <div className="filmsList__score">{score}</div>
-        <div>{type}</div>
-        <div>{year}</div>
       </div>
     </div>
   )

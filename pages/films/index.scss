@@ -1,14 +1,25 @@
-.search__container {
-  display: flex;
-  flex-direction: column;
-  height: 100vh;
+.search__body {
+  padding-top: 100px;
+  background-color: #f7f5fc;
 }
 
-.search__searchField {
-  padding-top: 20px;
+.search__wrapper {
+  display: flex;
+  padding-top: 30px;
+}
+
+.search__filmList {
+  border-left: 1px solid #000;
+  padding-left: 30px;
 }
 
 .search__paginator {
   margin-top: auto;
   padding-bottom: 50px;
+  display: flex;
+  justify-content: center;
+}
+
+.search__pageSizeSelecter-container {
+  padding-left: 30px;
 }

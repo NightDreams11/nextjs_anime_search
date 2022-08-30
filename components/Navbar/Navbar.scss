@@ -1,0 +1,28 @@
+$font: "Quicksand", sans-serif;
+
+.navbar__body {
+  width: 400px;
+  display: flex;
+  flex-direction: column;
+  padding-right: 30px;
+  height: 100px;
+}
+
+.navbar__selectors-container {
+  width: 250px;
+  margin-left: auto;
+  position: fixed;
+  left: 120px;
+}
+
+.navbar__subtitle {
+  padding-bottom: 20px;
+}
+
+.navbar__movieTypeSelecter-container {
+  padding-bottom: 20px;
+}
+
+.navbar__resetButton {
+  padding-top: 10px;
+}

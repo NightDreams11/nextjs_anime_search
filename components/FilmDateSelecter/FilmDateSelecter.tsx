@@ -1,9 +1,8 @@
 import * as React from "react"
 import Box from "@mui/material/Box"
-import InputLabel from "@mui/material/InputLabel"
 import MenuItem from "@mui/material/MenuItem"
 import FormControl from "@mui/material/FormControl"
-import Select, { SelectChangeEvent } from "@mui/material/Select"
+import { TextField } from "@mui/material"
 
 type FilmDateSelecterType = {
   handleChangeDate: (date: string) => void
@@ -14,19 +13,24 @@ export default function FilmDateSelecter({
   handleChangeDate,
   date,
 }: FilmDateSelecterType) {
-  const handleChange = (event: SelectChangeEvent) => {
+  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     handleChangeDate(event.target.value)
   }
 
   return (
     <Box sx={{ minWidth: 120 }}>
       <FormControl fullWidth>
-        <InputLabel id="demo-simple-select-label">Date</InputLabel>
-        <Select
-          labelId="demo-simple-select-label"
+        <TextField
+          sx={{
+            ".MuiInputBase-root": {
+              height: 40,
+            },
+          }}
+          select
+          size="small"
           id="demo-simple-select"
-          label="Date"
           value={date}
+          label="Date"
           onChange={handleChange}
         >
           <MenuItem value={"1"}>All years</MenuItem>
@@ -38,7 +42,7 @@ export default function FilmDateSelecter({
           <MenuItem value={"1970-1979"}>1970-1979</MenuItem>
           <MenuItem value={"1960-1969"}>1960-1969</MenuItem>
           <MenuItem value={"1950-1959"}>1950-1959</MenuItem>
-        </Select>
+        </TextField>
       </FormControl>
     </Box>
   )

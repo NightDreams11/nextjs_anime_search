@@ -1,9 +1,8 @@
 import * as React from "react"
 import Box from "@mui/material/Box"
-import InputLabel from "@mui/material/InputLabel"
 import MenuItem from "@mui/material/MenuItem"
 import FormControl from "@mui/material/FormControl"
-import Select, { SelectChangeEvent } from "@mui/material/Select"
+import { TextField } from "@mui/material"
 
 type MovieTypeSelectorType = {
   handleChangeFilmType: (perPage: string) => void
@@ -14,16 +13,21 @@ export default function MovieTypeSelector({
   handleChangeFilmType,
   type,
 }: MovieTypeSelectorType) {
-  const handleChange = (event: SelectChangeEvent) => {
+  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     handleChangeFilmType(event.target.value)
   }
 
   return (
     <Box sx={{ minWidth: 120 }}>
       <FormControl fullWidth>
-        <InputLabel id="demo-simple-select-label">Type</InputLabel>
-        <Select
-          labelId="demo-simple-select-label"
+        <TextField
+          sx={{
+            ".MuiInputBase-root": {
+              height: 40,
+            },
+          }}
+          select
+          size="small"
           id="demo-simple-select"
           value={type}
           label="Type"
@@ -35,7 +39,7 @@ export default function MovieTypeSelector({
           <MenuItem value={"special"}>Special</MenuItem>
           <MenuItem value={"ona"}>Ona</MenuItem>
           <MenuItem value={"music"}>Music</MenuItem>
-        </Select>
+        </TextField>
       </FormControl>
     </Box>
   )

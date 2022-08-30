@@ -49,6 +49,8 @@ type FetchFilmsType = {
   q?: string
   type?: string
   date_range?: string
+  order_by?: string
+  sort?: string
 }
 
 interface IStore {
@@ -88,19 +90,24 @@ class Store implements IStore {
 
   @action async fetchFilms({
     page = 1,
-    limit = 10,
+    limit,
     q,
     type,
     date_range,
+    order_by,
+    sort,
   }: FetchFilmsType) {
     const [start_date, end_date] = date_range?.split("-") ?? []
+
     const params = new URLSearchParams({
       page: String(page),
-      limit: String(limit),
+      ...(limit ? { limit: String(limit) } : {}),
       ...(q ? { q } : {}),
       ...(type ? { type } : {}),
       ...(date_range ? { start_date } : {}),
       ...(date_range ? { end_date } : {}),
+      ...(order_by ? { order_by } : {}),
+      ...(sort ? { sort } : {}),
     })
 
     return fetch(`https://api.jikan.moe/v4/anime?${params.toString()}`)

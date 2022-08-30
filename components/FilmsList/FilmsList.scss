@@ -1,7 +1,7 @@
 $font: "Quicksand", sans-serif;
 .filmsList__body {
   display: flex;
-  padding: 0 15px;
+  padding-bottom: 30px;
 }
 
 .filmsList__image {
@@ -22,5 +22,16 @@ $font: "Quicksand", sans-serif;
 }
 
 .filmsList__score-container {
-  min-width: 150px;
+  padding-top: 10px;
+  padding-bottom: 20px;
+}
+
+.filmsList__score,
+.filmList__type,
+.filmList__aired {
+  line-height: 20px;
+  font-weight: bold;
+  span {
+    color: #2e2bd6;
+  }
 }
