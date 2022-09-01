@@ -4,13 +4,13 @@ import Box from "@mui/material/Box"
 import Toolbar from "@mui/material/Toolbar"
 import Typography from "@mui/material/Typography"
 import "./Header.scss"
+import { Button } from "@mui/material"
 
 const styles = {
   title: {
-    display: { xs: "none", sm: "block" },
     textAlign: "center",
     color: "#1f1f1f",
-    fontFamily: ["Quicksand", "sans-serif"],
+    fontFamily: "Quicksand sans-serif ",
     fontSize: 40,
     fontWeight: 700,
     lineHeight: "48px",
@@ -25,10 +25,20 @@ const styles = {
 type HeaderType = {
   Search: React.ReactNode
   Sort: React.ReactNode
-  Diraction: React.ReactNode
+  Direction: React.ReactNode
+  title: string
+  resetSearchParams: () => void
+  searchQueries: string | string[] | undefined
 }
 
-export default function Header({ Search, Sort, Diraction }: HeaderType) {
+export default function Header({
+  Search,
+  Sort,
+  Direction,
+  title,
+  resetSearchParams,
+  searchQueries,
+}: HeaderType) {
   return (
     <Box sx={{ flexGrow: 1 }}>
       <AppBar
@@ -44,29 +54,23 @@ export default function Header({ Search, Sort, Diraction }: HeaderType) {
             },
           }}
         >
-          <Typography
+          <Typography sx={styles.title}>{title}</Typography>
+          <div className="header__search">{Search}</div>
+          <Button
+            variant="text"
+            onClick={resetSearchParams}
             sx={{
-              display: { xs: "none", sm: "block" },
-              color: "#1f1f1f",
-              // Нужно было поменять местами шрифты в массиве
-              fontFamily: ["sans-serif", "Quicksand"],
-              fontSize: 40,
-              fontWeight: 700,
-              lineHeight: "48px",
-              letterSpacing: "-0.5px",
-              "@media (min-width: 600px)": {
-                maxWidth: 405,
-                width: "100%",
-                paddingLeft: "96px",
-              },
+              visibility: searchQueries ? "visible" : "hidden",
+              height: 48,
+              ml: "10px",
+              color: "#000",
             }}
           >
-            Anime
-          </Typography>
-          <div className="header__search">{Search}</div>
+            Reset
+          </Button>
           <div className="header__params">
             <div className="header__sort">{Sort}</div>
-            <div className="header__direction">{Diraction}</div>
+            <div className="header__direction">{Direction}</div>
           </div>
         </Toolbar>
       </AppBar>

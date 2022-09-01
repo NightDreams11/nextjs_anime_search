@@ -4,15 +4,15 @@ import MenuItem from "@mui/material/MenuItem"
 import FormControl from "@mui/material/FormControl"
 import { TextField } from "@mui/material"
 
-type MovieTypeSelectorType = {
+type FilmTypeSelectorPropsType = {
   handleChangeFilmType: (perPage: string) => void
-  type: string
+  type: string | undefined
 }
 
-export default function MovieTypeSelector({
+export default function FilmTypeSelector({
   handleChangeFilmType,
   type,
-}: MovieTypeSelectorType) {
+}: FilmTypeSelectorPropsType) {
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     handleChangeFilmType(event.target.value)
   }

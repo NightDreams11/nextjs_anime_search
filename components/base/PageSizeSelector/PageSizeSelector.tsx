@@ -4,15 +4,15 @@ import MenuItem from "@mui/material/MenuItem"
 import FormControl from "@mui/material/FormControl"
 import { TextField } from "@mui/material"
 
-type PageSizeSelecterType = {
+type PageSizeSelectorPropsType = {
   handleChangePageSize: (perPage: string) => void
   perPage: number | undefined
 }
 
-export default function PageSizeSelecter({
+export default function PageSizeSelector({
   handleChangePageSize,
   perPage,
-}: PageSizeSelecterType) {
+}: PageSizeSelectorPropsType) {
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     handleChangePageSize(event.target.value)
   }

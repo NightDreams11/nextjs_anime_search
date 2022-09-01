@@ -4,16 +4,15 @@ import SearchField from "../../components/base/SearchField/SearchField"
 import { observer } from "mobx-react-lite"
 import { initializeStore, useStore } from "../../store/store"
 import React, { useEffect, useMemo } from "react"
-import FilmsList from "../../components/FilmsList/FilmsList"
 import { useRouter } from "next/router"
-import PageSizeSelecter from "../../components/PageSizeSelecter/PageSizeSelecter"
+import PageSizeSelector from "../../components/base/PageSizeSelector/PageSizeSelector"
 import { NextPageContext } from "next"
-import { Button } from "@mui/material"
 import { toJS } from "mobx"
-import MovieSortByParam from "../../components/MovieSortByParam/MovieSortByParam"
-import FilmsStartEndSort from "../../components/FilmsStartEndSort/FilmsStartEndSort"
-import Navbar from "../../components/Navbar/Navbar"
-import Header from "../../components/Header/Header"
+import FilmsOrderBySelector from "../../components/films/FilmsOrderBySelector/FilmsOrderBySelector"
+import SortDirectionToggler from "../../components/base/SortDirectionToggler/SortDirectionToggler"
+import Sidebar from "../../components/base/Sidebar/Sidebar"
+import Header from "../../components/base/Header/Header"
+import FilmCard from "../../components/films/FilmCard/FilmCard"
 
 const defaultTotalItemsCount = 10
 const defaultCurrentPage = 1
@@ -66,8 +65,8 @@ const Search = observer(() => {
     handleChangeQuery({ perPage })
   }
 
-  const handleChangeFilmTitle = (filmTitle: string | undefined) => {
-    handleChangeQuery({ filmTitle })
+  const handleChangeSearch = (value: string | undefined) => {
+    handleChangeQuery({ filmTitle: value })
   }
 
   const handleChangeFilmType = (type: string) => {
@@ -78,11 +77,11 @@ const Search = observer(() => {
     handleChangeQuery({ date_range: date })
   }
 
-  const handleSortByParam = (param: string) => {
+  const handleChangeOrderBy = (param: string) => {
     handleChangeQuery({ order_by: param })
   }
 
-  const handleToggleStartEndSort = (sortParam: string) => {
+  const handleSortDirectionToggler = (sortParam: string) => {
     handleChangeQuery({ sort: sortParam })
   }
 
@@ -106,7 +105,7 @@ const Search = observer(() => {
     return route.query.date_range as string
   }, [route.query])
 
-  let movieParam = useMemo(() => {
+  let filmParam = useMemo(() => {
     return route.query.order_by as string
   }, [route.query])
 
@@ -114,20 +113,43 @@ const Search = observer(() => {
     return route.query.sort as string
   }, [route.query])
 
-  const resetQueries = () => {
-    route.push({})
-    filmTitle = ""
+  const resetFiltersQueries = () => {
+    const params = { ...route.query }
+    delete params.page
+    delete params.perPage
+    delete params.type
+    delete params.date_range
+
+    route.push({
+      query: {
+        ...params,
+      },
+    })
   }
 
-  const isQueries = useMemo(() => {
+  const resetSearchParams = () => {
+    const params = { ...route.query }
+    delete params.order_by
+    delete params.sort
+    delete params.filmTitle
+
+    route.push({
+      query: {
+        ...params,
+      },
+    })
+  }
+
+  const searchQueries = useMemo(() => {
+    return route.query.filmTitle || route.query.order_by || route.query.sort
+  }, [route.query])
+
+  const filtersQueries = useMemo(() => {
     return (
       route.query.page ||
       route.query.perPage ||
-      route.query.filmTitle ||
       route.query.type ||
-      route.query.date_range ||
-      route.query.order_by ||
-      route.query.sort
+      route.query.date_range
     )
   }, [route.query])
 
@@ -138,43 +160,48 @@ const Search = observer(() => {
       q: filmTitle,
       type: filmType,
       date_range: dateRange,
-      order_by: movieParam,
+      order_by: filmParam,
       sort: sortDiraction,
     })
   }, [route.query])
 
   return (
-    <div className="search__body">
+    <div className="search">
       <Header
         Search={
           <SearchField
-            handleChangeFilmTitle={handleChangeFilmTitle}
-            filmName={filmTitle}
+            handleChangeSearch={handleChangeSearch}
+            filmName={filmTitle ?? ""}
           />
         }
         Sort={
-          <MovieSortByParam
-            handleSortByParam={handleSortByParam}
-            param={movieParam}
+          <FilmsOrderBySelector
+            handleChangeOrderBy={handleChangeOrderBy}
+            param={filmParam}
           />
         }
-        Diraction={
-          <FilmsStartEndSort
-            handleToggleStartEndSort={handleToggleStartEndSort}
+        Direction={
+          <SortDirectionToggler
+            handleSortDirectionToggler={handleSortDirectionToggler}
+            sortDiraction={sortDiraction}
+            filmParam={filmParam}
           />
         }
+        resetSearchParams={resetSearchParams}
+        searchQueries={searchQueries}
+        title={"Anime"}
       />
 
       <div className="search__wrapper">
         <div className="search__navbar-container">
-          <Navbar
+          <Sidebar
             handleChangeFilmType={handleChangeFilmType}
             handleChangeDate={handleChangeDate}
             filmType={filmType}
             dateRange={dateRange}
             defaultFilmDate={defaultFilmDate}
-            resetQueries={resetQueries}
-            isQueries={isQueries}
+            resetFiltersQueries={resetFiltersQueries}
+            filtersQueries={filtersQueries}
           />
         </div>
         <div className="search__container">
@@ -182,7 +209,7 @@ const Search = observer(() => {
             {store.films.map((film) => {
               return (
                 <div key={film.mal_id}>
-                  <FilmsList
+                  <FilmCard
                     title={film.title}
                     imageUrl={film.images.jpg.image_url}
                     synopsis={film.synopsis}
@@ -203,8 +230,8 @@ const Search = observer(() => {
               currentPage={page ?? defaultCurrentPage}
               handleChangePage={handleChangePage}
             />
-            <div className="search__pageSizeSelecter-container">
-              <PageSizeSelecter
+            <div className="search__PageSizeSelector-container">
+              <PageSizeSelector
                 handleChangePageSize={handleChangePageSize}
                 perPage={perPage ?? undefined}
               />

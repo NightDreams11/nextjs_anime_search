@@ -5,15 +5,15 @@ import IconButton from "@mui/material/IconButton"
 import SearchIcon from "@mui/icons-material/Search"
 import "./SearchField.scss"
 
-type SearchFieldtype = {
-  handleChangeFilmTitle: (filmTitle: string | undefined) => void
+type SearchFieldPropsType = {
+  handleChangeSearch: (value: string | undefined) => void
   filmName: string | undefined
 }
 
 export default function SearchField({
-  handleChangeFilmTitle,
+  handleChangeSearch,
   filmName,
-}: SearchFieldtype) {
+}: SearchFieldPropsType) {
   const [filmTitle, setFilmTitle] = React.useState(filmName)
 
   return (
@@ -37,7 +37,7 @@ export default function SearchField({
         <IconButton
           sx={{ p: "10px" }}
           aria-label="search"
-          onClick={() => handleChangeFilmTitle(filmTitle)}
+          onClick={() => handleChangeSearch(filmTitle)}
         >
           <SearchIcon />
         </IconButton>

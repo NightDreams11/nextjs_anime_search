@@ -1,7 +1,7 @@
 import Link from "next/link"
-import "./FilmsList.scss"
+import "./FilmCard.scss"
 
-type FilmsListType = {
+type FilmCardPropsType = {
   title: string
   imageUrl: any
   synopsis: string
@@ -11,7 +11,7 @@ type FilmsListType = {
   year: number
 }
 
-const FilmsList = ({
+const FilmCard = ({
   title,
   imageUrl,
   synopsis,
@@ -19,7 +19,7 @@ const FilmsList = ({
   id,
   type,
   year,
-}: FilmsListType) => {
+}: FilmCardPropsType) => {
   return (
     <div className="filmsList__body">
       <div className="filmsList__image">
@@ -54,4 +54,4 @@ const FilmsList = ({
   )
 }
 
-export default FilmsList
+export default FilmCard

@@ -1,48 +1,50 @@
 import { Button } from "@mui/material"
-import FilmDateSelecter from "../FilmDateSelecter/FilmDateSelecter"
-import MovieTypeSelector from "../MovieTypeSelecter/MovieTypeSelecter"
-import "./Navbar.scss"
+import FilmDateSelector from "../../films/FilmDateSelector/FilmDateSelector"
+import FilmTypeSelector from "../../films/FilmTypeSelector/FilmTypeSelector"
+import "./Sidebar.scss"
 
-type NavbarType = {
+type SidebarPropsType = {
   handleChangeFilmType: (type: string) => void
-  filmType: string
+  filmType: string | undefined
   handleChangeDate: (date: string) => void
-  dateRange: string
+  dateRange: string | undefined
   defaultFilmDate: string
-  resetQueries: () => void
-  isQueries: string | string[] | undefined
+  resetFiltersQueries: () => void
+  filtersQueries: string | string[] | undefined
 }
 
-const Navbar = ({
+const Sidebar = ({
   handleChangeFilmType,
   filmType,
   handleChangeDate,
   dateRange,
   defaultFilmDate,
-  resetQueries,
-  isQueries,
-}: NavbarType) => {
+  resetFiltersQueries,
+  filtersQueries,
+}: SidebarPropsType) => {
   return (
     <div className="navbar__body">
       <div className="navbar__selectors-container">
         <div className="navbar__subtitle">Filters:</div>
         <div className="navbar__movieTypeSelecter-container">
-          <MovieTypeSelector
+          <FilmTypeSelector
             handleChangeFilmType={handleChangeFilmType}
             type={filmType}
           />
         </div>
         <div className="navbar__filmDateSelecter-container">
-          <FilmDateSelecter
+          <FilmDateSelector
             handleChangeDate={handleChangeDate}
             date={dateRange ?? defaultFilmDate}
           />
         </div>
         <div className="navbar__resetButton">
-          {isQueries && <Button onClick={resetQueries}>Reset</Button>}
+          {filtersQueries && (
+            <Button onClick={resetFiltersQueries}>Reset</Button>
+          )}
         </div>
       </div>
     </div>
   )
 }
-export default Navbar
+export default Sidebar

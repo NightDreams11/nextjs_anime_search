@@ -3,7 +3,7 @@ import Pagination from "@mui/material/Pagination"
 import Stack from "@mui/material/Stack"
 import "./Paginator.scss"
 
-type PaginatorType = {
+type PaginatorPropsType = {
   totalPagesCount: number
   currentPage: number
   handleChangePage: (page: string) => void
@@ -13,7 +13,7 @@ export default function Paginator({
   totalPagesCount,
   currentPage,
   handleChangePage,
-}: PaginatorType) {
+}: PaginatorPropsType) {
   return (
     <div className="paginatorContainer">
       <Stack spacing={2}>

@@ -1,5 +1,6 @@
 import "./Header.scss"
 import logo from "../../../../img/logo.svg"
+import Link from "next/link"
 
 export const Header = () => {
   return (
@@ -12,7 +13,11 @@ export const Header = () => {
         </ul>
       </nav>
       <div className="about__logo">
-        <img src={logo.src} alt="next" />
+        <Link href="/films">
+          <a>
+            <img src={logo.src} alt="next" />
+          </a>
+        </Link>
       </div>
     </>
   )

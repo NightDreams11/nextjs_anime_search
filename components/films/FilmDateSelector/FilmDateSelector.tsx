@@ -4,15 +4,15 @@ import MenuItem from "@mui/material/MenuItem"
 import FormControl from "@mui/material/FormControl"
 import { TextField } from "@mui/material"
 
-type FilmDateSelecterType = {
+type FilmDateSelectorPropsType = {
   handleChangeDate: (date: string) => void
   date: string
 }
 
-export default function FilmDateSelecter({
+export default function FilmDateSelector({
   handleChangeDate,
   date,
-}: FilmDateSelecterType) {
+}: FilmDateSelectorPropsType) {
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     handleChangeDate(event.target.value)
   }

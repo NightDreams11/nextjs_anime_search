@@ -3,15 +3,15 @@ import MenuItem from "@mui/material/MenuItem"
 import FormControl from "@mui/material/FormControl"
 import { Box, TextField } from "@mui/material"
 
-type MovieSortByParamType = {
-  handleSortByParam: (param: string) => void
-  param: string
+type FilmsOrderBySelectorPropsType = {
+  handleChangeOrderBy: (param: string) => void
+  param: string | undefined
 }
 
-export default function MovieSortByParam({
-  handleSortByParam,
+export default function FilmsOrderBySelector({
+  handleChangeOrderBy,
   param,
-}: MovieSortByParamType) {
+}: FilmsOrderBySelectorPropsType) {
   const styles = {
     textField: {
       "& label.Mui-focused": {
@@ -32,13 +32,12 @@ export default function MovieSortByParam({
       },
       ".Mui-focused": {
         top: 0,
-        // "& > fieldset": { border: "1px solid red" },
       },
     },
   }
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    handleSortByParam(event.target.value)
+    handleChangeOrderBy(event.target.value)
   }
 
   return (
