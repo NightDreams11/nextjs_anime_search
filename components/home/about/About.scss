@@ -1,0 +1,24 @@
+.about {
+  background-image: url(../../../img/about.svg);
+  min-height: 1027px;
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center;
+  position: relative;
+  .about__triangle {
+    position: absolute;
+    left: 0;
+    top: -41px;
+    height: 100%;
+    width: 100%;
+    background: linear-gradient(
+      25deg,
+      rgba(217, 217, 217, 0) 0%,
+      rgba(217, 217, 217, 0) 53.5%,
+      rgba(217, 217, 217, 1) 53.5%,
+      rgba(217, 217, 217, 1) 53.5%,
+      rgba(217, 217, 217, 0.5) 53.5%,
+      rgba(217, 217, 217, 0.5) 100%
+    );
+  }
+}

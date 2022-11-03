@@ -1,0 +1,36 @@
+.filmsList__body {
+  display: flex;
+  padding-bottom: 30px;
+}
+
+.filmsList__image {
+  cursor: pointer;
+}
+
+.filmsList__description-container {
+  padding-left: 50px;
+}
+
+.filmsList__title {
+  color: #1f1f1f;
+  font-family: var(--font);
+  font-size: 40px;
+  font-weight: 700;
+  line-height: 48px;
+  letter-spacing: -0.5px;
+}
+
+.filmsList__score-container {
+  padding-top: 10px;
+  padding-bottom: 20px;
+}
+
+.filmsList__score,
+.filmList__type,
+.filmList__aired {
+  line-height: 20px;
+  font-weight: bold;
+  span {
+    color: #2e2bd6;
+  }
+}
